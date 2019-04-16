@@ -10,30 +10,30 @@ function getListItems(listTitle, success, error) {
     success(items);
   }, error);
 }
-
-function checkForFirstItem(isCheckItem){
-  var firstItem;
-  (isCheckItem)? firstItem = true : firstItem = false;
-  return firstItem;
-}
-
-function collapsedOrNot(accordionItemIndex){
-  var isFirstItem = (accordionItemIndex !== 0) ? checkForFirstItem(false) : checkForFirstItem(true);
+function collapsedItemOrNot(accordionItemIndex){
+  var isFirstItem = (accordionItemIndex !== 0);
   var collapse = (isFirstItem) ? 'in' : '';
   return collapse;
 }
 
-function buildAccordionListItem(accordionItemIndex, title, definition){
-  var collapseness = collapsedOrNot();
-  return listItems = "<div class='panel panel-default'><div class='panel-heading'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + accordionItemIndex + "'>" + title + "</a></h4></div><div id='collapse" + accordionItemIndex + "' class='panel-collapse collapse " + collapseness + "'><div class='panel-body'>" + definition + "</div></div></div>"
+function setDetails(Item) {
+  var ItemDetails = [];
+  ItemDetails.itemIndex = Item;
+  ItemDetails.itemTitle = Item.get_fieldValues()['Title'];
+  ItemDetails.itemDefinition = Item.get_fieldValues()['Definition'];
+  ItemDetails.itemCollapse = collapsedItemOrNot(accordionItemIndex);
+  return ItemDetails
 }
 
-function accordionItemsDetails(accordionItems) {
-  for (var accordionItem = 0; accordionItem < accordionItems.get_count(); i++) {
-    var pageItem = accordionItems.getItemAtIndex(accordionItem);
-    var itemTitle = pageItem.get_fieldValues()['Title'];
-    var itemDefinition = pageItem.get_fieldValues()['Definition'];
-    buildAccordionListItem(accordionItem,itemTitle,itemDefinition);
-    $("#accordion").append(listItems);
+function buildListItem(itemDetails,type) {
+  return listItems = "<div class='panel panel-default'><div class='panel-heading'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + itemDetails.accordionItemIndex + "'>" + itemDetails.title + "</a></h4></div><div id='collapse" + itemDetails.accordionItemIndex + "' class='panel-collapse collapse " + itemDetails.collapse + "'><div class='panel-body'>" + itemDetails.definition + "</div></div></div>"
+}
+
+function componantItemsDetails(spListItems, componant, type) {
+  for (var i = 0; i < splistItems.get_count(); i++) {
+    var Item = splistItems.getItemAtIndex(i);
+    setDetails(Item);
+    buildListItem(ItemDetails,type);
+    $(componant).append(listItems);
   }
 }
