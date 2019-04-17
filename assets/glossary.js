@@ -10,19 +10,30 @@ function getListItems(listTitle, success, error) {
     success(items);
   }, error);
 }
-function collapsedItemOrNot(accordionItemIndex){
-  var isFirstItem = (accordionItemIndex !== 0);
-  var collapse = (isFirstItem) ? 'in' : '';
-  return collapse;
+// Check if the item passed is at correct array index.
+// If the item is at the index return true.
+function checkTheItemIndex(itemIndex, indexPositionToMatch){
+  var itemIsAtIndex = (itemIndex !== indexPositionToMatch);
+  return itemIsAtIndex;
 }
 
+// Check if item is at the index to be collapsed.
+function collapsedItemOrNot(item, positionToCollapse){
+ var isCollapse = checkTheItemIndex(item,positionToCollapse);
+ return isCollapse;
+}
+
+// Pass the item data through
+// Create array to hold datas properties and property modifications
+// Determine what details are needed for specified componant
+// Return the itemDetails array
 function setDetails(Item) {
-  var ItemDetails = [];
-  ItemDetails.itemIndex = Item;
-  ItemDetails.itemTitle = Item.get_fieldValues()['Title'];
-  ItemDetails.itemDefinition = Item.get_fieldValues()['Definition'];
-  ItemDetails.itemCollapse = collapsedItemOrNot(accordionItemIndex);
-  return ItemDetails
+  var itemDetails = [];
+  itemDetails.itemIndex = Item;
+  itemDetails.itemTitle = Item.get_fieldValues()['Title'];
+  itemDetails.itemDefinition = Item.get_fieldValues()['Definition'];
+  itemDetails.itemCollapse = (collapsedItemOrNot(accordionItemIndex, 0))? 'in' : '';
+  return itemDetails
 }
 
 function buildListItem(itemDetails,type) {
